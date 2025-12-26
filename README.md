@@ -1,4 +1,108 @@
+<<<<<<< HEAD
+<<<<<<< HEAD
+# House Price Prediction - React Frontend
+
+A modern React web application for predicting house prices using machine learning.
+
+## Features
+
+- 🏠 Interactive house price prediction form
+- 📊 Real-time price estimation with confidence ranges
+- 🎨 Modern, responsive UI design
+- 🔗 Seamless integration with Flask API backend
+
+## Prerequisites
+
+- Node.js (v14 or higher)
+- npm or yarn
+- Running Flask API backend on `http://localhost:5000`
+
+## Installation
+
+1. Navigate to the frontend directory:
+   ```bash
+   cd frontend
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+## Running the Application
+
+1. **Start the Flask API backend first:**
+   ```bash
+   # In the main project directory
+   python app.py
+   ```
+
+2. **Start the React development server:**
+   ```bash
+   npm start
+   ```
+
+3. Open [http://localhost:3000](http://localhost:3000) in your browser
+
+## Usage
+
+1. Fill in the house features in the form:
+   - Overall Quality (1-10 scale)
+   - Ground Living Area (square feet)
+   - Total Basement Area (square feet)
+   - First Floor Area (square feet)
+   - Number of Full Bathrooms
+   - Year Built
+   - Year Remodeled
+   - Garage Capacity (number of cars)
+   - Garage Area (square feet)
+   - Lot Area (square feet)
+   - Bedrooms Above Ground
+   - Total Rooms Above Ground
+
+2. Click "Predict House Price"
+
+3. View the predicted price with confidence range
+
+## API Integration
+
+The frontend communicates with a Flask API backend that uses a trained Random Forest model. The API endpoint expects:
+
+- **URL:** `/predict`
+- **Method:** POST
+- **Content-Type:** application/json
+- **Body:** JSON object with house features
+
+Example request:
+```json
+{
+  "Overall Qual": 7,
+  "Gr Liv Area": 1710,
+  "Total Bsmt SF": 856,
+  "1st Flr SF": 856,
+  "Full Bath": 2,
+  "Year Built": 2003,
+  "Year Remod/Add": 2003,
+  "Garage Cars": 2,
+  "Garage Area": 548,
+  "Lot Area": 8450,
+  "Bedroom AbvGr": 3,
+  "TotRms AbvGrd": 8
+}
+```
+
+## Building for Production
+
+```bash
+npm run build
+```
+
+This creates a `build` directory with optimized production files.
+=======
+# House Price Prediction Project
+=======
 # 🏠 House Price Prediction - Full Stack Application
+>>>>>>> ef3e1fb5f07edc7a94b10d5bdc786322bd3089f5
 
 A complete machine learning application with a React frontend and Flask API backend for predicting house prices using the Ames Housing dataset.
 
@@ -238,7 +342,70 @@ npm test
 
 ## 📊 Model Performance
 
+<<<<<<< HEAD
+### Cloud Deployment
+
+For production deployment, consider:
+
+- **Heroku**: Use the provided `Procfile`
+- **AWS/GCP/Azure**: Deploy as container or serverless function
+- **Railway/Render**: Simple deployment platforms
+>>>>>>> 8203cdef13b405fec4e9fb5600058a5db4446d36
+
+## Project Structure
+
+```
+<<<<<<< HEAD
+frontend/
+├── public/
+│   ├── index.html
+│   └── ...
+├── src/
+│   ├── App.js          # Main application component
+│   ├── App.css         # Application styles
+│   ├── index.js        # Application entry point
+│   └── ...
+├── package.json        # Dependencies and scripts
+└── README.md          # This file
+```
+
+## Technologies Used
+
+- **React 18** - Frontend framework
+- **CSS3** - Styling with modern features
+- **Fetch API** - HTTP requests
+- **Responsive Design** - Mobile-friendly interface
+
+## Troubleshooting
+
+**API Connection Issues:**
+- Ensure the Flask backend is running on port 5000
+- Check browser console for CORS errors
+- Verify the API is accessible at `http://localhost:5000/health`
+
+**Form Validation:**
+- All fields are required
+- Numeric inputs have min/max validation
+- Check browser console for validation errors
+=======
+house-price-prediction/
+├── app.py                 # Flask API application
+├── train.py              # Model training script
+├── requirements.txt      # Python dependencies
+├── house_price_model.pkl # Trained model (generated)
+├── AmesHousing.csv       # Dataset (download separately)
+├── Dockerfile           # Docker configuration
+├── Procfile             # Heroku deployment
+├── README.md            # This file
+└── .venv/               # Virtual environment
+```
+
+## Model Performance
+
+The Random Forest model typically achieves:
+=======
 The Random Forest model achieves:
+>>>>>>> ef3e1fb5f07edc7a94b10d5bdc786322bd3089f5
 - **MAE**: ~$18,000 - $22,000
 - **RMSE**: ~$28,000 - $35,000
 - **R² Score**: 0.85 - 0.90
@@ -256,20 +423,54 @@ The Random Forest model achieves:
 ### Missing Features
 
 If some features are missing in prediction requests, they default to 0. For better accuracy, provide all features.
+>>>>>>> 8203cdef13b405fec4e9fb5600058a5db4446d36
 
 ## 🤝 Contributing
 
 1. Fork the repository
 2. Create a feature branch
+<<<<<<< HEAD
+3. Make your changes
+=======
 3. Make changes
+>>>>>>> 8203cdef13b405fec4e9fb5600058a5db4446d36
 4. Test thoroughly
 5. Submit a pull request
 
 ## 📄 License
 
+<<<<<<< HEAD
+This project is licensed under the MIT License.
+
+### Analyzing the Bundle Size
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+
+### Making a Progressive Web App
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+
+### Advanced Configuration
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+
+### Deployment
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+
+### `npm run build` fails to minify
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+=======
 This project is for educational purposes. Check dataset license for commercial use.
 
 ## 👨‍💻 Author
 
+<<<<<<< HEAD
+[Your Name]
+Date: December 2025
+>>>>>>> 8203cdef13b405fec4e9fb5600058a5db4446d36
+=======
 Chandru-debug1
 Date: December 2025
+>>>>>>> ef3e1fb5f07edc7a94b10d5bdc786322bd3089f5

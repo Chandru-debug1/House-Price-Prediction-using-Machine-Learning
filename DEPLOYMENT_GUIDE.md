@@ -225,13 +225,29 @@ print(f"Predicted Price: ${result['predicted_price']:,.2f}")
 | PythonAnywhere | Limited | $5/month | Python apps |
 | Replit | Basic | $7/month | Prototyping |
 
-## Future Improvements
+## Production Server Setup
 
-1. **Database Integration**: Store predictions history
-2. **Authentication**: Add API keys for security
-3. **Rate Limiting**: Prevent abuse
-4. **Monitoring**: Add logging and metrics
-5. **CI/CD**: Automated testing and deployment
+For production deployment, replace the development server with a WSGI server:
+
+### Install Gunicorn
+```bash
+pip install gunicorn
+```
+
+### Production Startup
+```bash
+# Instead of: python app.py
+gunicorn --bind 0.0.0.0:$PORT app:app
+```
+
+### Update Procfile for Heroku
+```
+web: gunicorn --bind 0.0.0.0:$PORT app:app
+```
+
+### Environment Variables
+- `PORT`: Server port (provided by hosting platforms)
+- `FLASK_ENV`: Set to 'production' for production
 
 ## Support
 

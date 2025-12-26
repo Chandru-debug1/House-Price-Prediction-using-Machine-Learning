@@ -128,14 +128,20 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-# Operating System
-.DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
-Thumbs.db
+# Machine Learning / Data Science
+*.pkl
+*.pickle
+*.joblib
+*.h5
+*.hdf5
+*.model
+*.weights
+*.pb
+*.onnx
+*.tflite
+*.ckpt
+*.pth
+*.pt
 
 # IDEs
 .vscode/
@@ -144,27 +150,36 @@ Thumbs.db
 *.swo
 *~
 
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
 # Logs
 *.log
 logs/
 
-# Database
-*.sqlite
-*.sqlite3
-*.db
-
 # Temporary files
 *.tmp
 *.temp
+.cache/
 
-# Model files (uncomment if you want to ignore trained models)
-# *.pkl
-# *.joblib
-# house_price_model.pkl
+# Database
+*.db
+*.sqlite
+*.sqlite3
 
-# Dataset (uncomment if dataset is large and should not be in repo)
-# AmesHousing.csv
-
-# Deployment
+# Secrets and keys
+secrets.json
+config/secrets.json
 .env.local
 .env.production
+.env.staging
+
+# Render deployment
+render.yaml
+render-build.sh

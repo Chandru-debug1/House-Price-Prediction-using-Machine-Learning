@@ -10,6 +10,12 @@ from dotenv import load_dotenv
 # Load environment variables from .env file if it exists
 load_dotenv()
 
+# Create .env file from example if it doesn't exist
+if not os.path.exists('.env') and os.path.exists('.env.example'):
+    import shutil
+    shutil.copy('.env.example', '.env')
+    print("Created .env file from .env.example template")
+
 # Environment Variables Configuration
 class Config:
     """Application configuration from environment variables"""

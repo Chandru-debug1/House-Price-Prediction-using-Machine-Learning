@@ -15,8 +15,7 @@ start "Flask API" cmd /k "python app.py"
 timeout /t 3 /nobreak > nul
 
 echo Starting React frontend...
-cd frontend
-start "React Frontend" cmd /k "npm start"
+start "React Frontend" cmd /k "start_frontend.bat"
 
 cd ..
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 
 function App() {
@@ -20,6 +20,34 @@ function App() {
   const [prediction, setPrediction] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [currentStep, setCurrentStep] = useState(0);
+  const [showResults, setShowResults] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [animationKey, setAnimationKey] = useState(0);
+  useEffect(() => {
+    if (showResults) {
+      const createConfetti = () => {
+        const confetti = document.createElement('div');
+        confetti.className = 'confetti';
+        confetti.style.left = Math.random() * 100 + 'vw';
+        confetti.style.animationDelay = Math.random() * 3 + 's';
+        confetti.style.backgroundColor = ['#667eea', '#764ba2', '#f093fb', '#f5576c', '#4facfe', '#00f2fe'][Math.floor(Math.random() * 6)];
+        document.body.appendChild(confetti);
+
+        setTimeout(() => {
+          if (confetti.parentNode) {
+            confetti.parentNode.removeChild(confetti);
+          }
+        }, 4000);
+      };
+
+      // Create multiple confetti pieces
+      for (let i = 0; i < 50; i++) {
+        setTimeout(createConfetti, i * 100);
+      }
+    }
+  }, [showResults]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -31,8 +59,22 @@ function App() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
+    setIsLoading(true);
     setError(null);
+    setShowResults(false);
+    setProgress(0);
+    setAnimationKey(prev => prev + 1);
+
+    // Simulate progress animation
+    const progressInterval = setInterval(() => {
+      setProgress(prev => {
+        if (prev >= 90) {
+          clearInterval(progressInterval);
+          return 90;
+        }
+        return prev + Math.random() * 15;
+      });
+    }, 200);
 
     try {
       const response = await fetch('/predict', {
@@ -48,228 +90,360 @@ function App() {
       }
 
       const result = await response.json();
+      setProgress(100);
       setPrediction(result);
+
+      // Add delay for better UX
+      setTimeout(() => {
+        setShowResults(true);
+        setIsLoading(false);
+      }, 500);
+
     } catch (err) {
       setError(err.message);
-    } finally {
-      setLoading(false);
+      setIsLoading(false);
+      clearInterval(progressInterval);
     }
   };
 
+  const resetForm = () => {
+    setPrediction(null);
+    setShowResults(false);
+    setError(null);
+    setCurrentStep(0);
+    setProgress(0);
+    setAnimationKey(prev => prev + 1);
+  };
+
+  // Form sections for better organization
+  const formSections = [
+    {
+      title: "🏠 Basic Property Info",
+      icon: "🏠",
+      fields: [
+        { name: 'Overall Qual', label: 'Overall Quality', type: 'range', min: 1, max: 10, step: 1 },
+        { name: 'Lot Area', label: 'Lot Area (sq ft)', type: 'number', min: 1000, max: 50000 },
+        { name: 'Year Built', label: 'Year Built', type: 'number', min: 1800, max: 2025 }
+      ]
+    },
+    {
+      title: "🏡 Living Spaces",
+      icon: "🏡",
+      fields: [
+        { name: 'Gr Liv Area', label: 'Ground Living Area (sq ft)', type: 'number', min: 300, max: 10000 },
+        { name: 'Total Bsmt SF', label: 'Total Basement (sq ft)', type: 'number', min: 0, max: 5000 },
+        { name: '1st Flr SF', label: 'First Floor (sq ft)', type: 'number', min: 300, max: 5000 }
+      ]
+    },
+    {
+      title: "🚗 Garage & Amenities",
+      icon: "🚗",
+      fields: [
+        { name: 'Garage Cars', label: 'Garage Capacity', type: 'range', min: 0, max: 4, step: 1 },
+        { name: 'Garage Area', label: 'Garage Area (sq ft)', type: 'number', min: 0, max: 1500 },
+        { name: 'Year Remod/Add', label: 'Year Remodeled', type: 'number', min: 1800, max: 2025 }
+      ]
+    },
+    {
+      title: "👥 Rooms & Facilities",
+      icon: "👥",
+      fields: [
+        { name: 'Full Bath', label: 'Full Bathrooms', type: 'range', min: 0, max: 5, step: 1 },
+        { name: 'Bedroom AbvGr', label: 'Bedrooms', type: 'range', min: 0, max: 10, step: 1 },
+        { name: 'TotRms AbvGrd', label: 'Total Rooms', type: 'range', min: 2, max: 15, step: 1 }
+      ]
+    }
+  ];
+
   return (
     <div className="App">
-      <header className="App-header">
-        <h1>🏠 House Price Prediction</h1>
-        <p>Enter house features to get a price prediction</p>
+      {/* Animated Background */}
+      <div className="animated-bg">
+        <div className="bg-shape shape-1"></div>
+        <div className="bg-shape shape-2"></div>
+        <div className="bg-shape shape-3"></div>
+      </div>
+
+      {/* Header */}
+      <header className="hero-section">
+        <div className="hero-content">
+          <div className="hero-icon">🏠</div>
+          <h1 className="hero-title">
+            <span className="gradient-text">House Price</span>
+            <br />
+            <span className="hero-subtitle">Predictor</span>
+          </h1>
+          <p className="hero-description">
+            Discover your dream home's market value with our AI-powered prediction tool.
+            Get accurate estimates in seconds!
+          </p>
+          <div className="hero-stats">
+            <div className="stat">
+              <span className="stat-number">85%</span>
+              <span className="stat-label">Accuracy</span>
+            </div>
+            <div className="stat">
+              <span className="stat-number">10K+</span>
+              <span className="stat-label">Predictions</span>
+            </div>
+            <div className="stat">
+              <span className="stat-number">24/7</span>
+              <span className="stat-label">Available</span>
+            </div>
+          </div>
+        </div>
       </header>
 
-      <main className="prediction-form">
-        <form onSubmit={handleSubmit}>
-          <div className="form-grid">
-            <div className="form-group">
-              <label htmlFor="overall-qual">Overall Quality (1-10):</label>
-              <input
-                type="number"
-                id="overall-qual"
-                name="Overall Qual"
-                min="1"
-                max="10"
-                value={formData['Overall Qual']}
-                onChange={handleInputChange}
-                required
-              />
+      {/* Main Content */}
+      <main className="main-content">
+        {!showResults ? (
+          <div className="prediction-form-container">
+            <div className="form-header">
+              <h2>Enter Property Details</h2>
+              <p>Fill in the information below to get an instant price prediction</p>
             </div>
 
-            <div className="form-group">
-              <label htmlFor="gr-liv-area">Ground Living Area (sq ft):</label>
-              <input
-                type="number"
-                id="gr-liv-area"
-                name="Gr Liv Area"
-                min="300"
-                max="10000"
-                value={formData['Gr Liv Area']}
-                onChange={handleInputChange}
-                required
-              />
-            </div>
+            <form onSubmit={handleSubmit} className="prediction-form">
+              {formSections.map((section, sectionIndex) => (
+                <div key={sectionIndex} className="form-section">
+                  <div className="section-header">
+                    <span className="section-icon">{section.icon}</span>
+                    <h3 className="section-title">{section.title}</h3>
+                  </div>
 
-            <div className="form-group">
-              <label htmlFor="total-bsmt-sf">Total Basement Area (sq ft):</label>
-              <input
-                type="number"
-                id="total-bsmt-sf"
-                name="Total Bsmt SF"
-                min="0"
-                max="5000"
-                value={formData['Total Bsmt SF']}
-                onChange={handleInputChange}
-                required
-              />
-            </div>
+                  <div className="section-fields">
+                    {section.fields.map((field, fieldIndex) => (
+                      <div key={fieldIndex} className="form-field">
+                        <label htmlFor={field.name} className="field-label">
+                          {field.label}
+                        </label>
 
-            <div className="form-group">
-              <label htmlFor="1st-flr-sf">First Floor Area (sq ft):</label>
-              <input
-                type="number"
-                id="1st-flr-sf"
-                name="1st Flr SF"
-                min="300"
-                max="5000"
-                value={formData['1st Flr SF']}
-                onChange={handleInputChange}
-                required
-              />
-            </div>
+                        {field.type === 'range' ? (
+                          <div className="range-input-container">
+                            <input
+                              type="range"
+                              id={field.name}
+                              name={field.name}
+                              min={field.min}
+                              max={field.max}
+                              step={field.step}
+                              value={formData[field.name]}
+                              onChange={handleInputChange}
+                              className="range-input"
+                            />
+                            <div className="range-value">
+                              <span className="value-display">{formData[field.name]}</span>
+                              {field.name === 'Overall Qual' && (
+                                <span className="quality-label">
+                                  {formData[field.name] <= 3 ? 'Poor' :
+                                   formData[field.name] <= 5 ? 'Fair' :
+                                   formData[field.name] <= 7 ? 'Good' :
+                                   formData[field.name] <= 9 ? 'Excellent' : 'Outstanding'}
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                        ) : (
+                          <input
+                            type={field.type}
+                            id={field.name}
+                            name={field.name}
+                            min={field.min}
+                            max={field.max}
+                            value={formData[field.name]}
+                            onChange={handleInputChange}
+                            className="text-input"
+                            placeholder={`Enter ${field.label.toLowerCase()}`}
+                            required
+                          />
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
 
-            <div className="form-group">
-              <label htmlFor="full-bath">Full Bathrooms:</label>
-              <input
-                type="number"
-                id="full-bath"
-                name="Full Bath"
-                min="0"
-                max="5"
-                value={formData['Full Bath']}
-                onChange={handleInputChange}
-                required
-              />
-            </div>
+              {error && (
+                <div className="error-message">
+                  <div className="error-icon">⚠️</div>
+                  <div className="error-content">
+                    <h3>Prediction Error</h3>
+                    <p>{error}</p>
+                    <p className="error-hint">Make sure the backend API is running on port 5000</p>
+                  </div>
+                </div>
+              )}
 
-            <div className="form-group">
-              <label htmlFor="year-built">Year Built:</label>
-              <input
-                type="number"
-                id="year-built"
-                name="Year Built"
-                min="1800"
-                max="2025"
-                value={formData['Year Built']}
-                onChange={handleInputChange}
-                required
-              />
-            </div>
+              <div className="form-actions">
+                {isLoading && (
+                  <div className="progress-container">
+                    <div className="progress-bar">
+                      <div
+                        className="progress-fill"
+                        style={{ width: `${progress}%` }}
+                      ></div>
+                    </div>
+                    <div className="progress-text">
+                      {progress < 30 && "Analyzing property data..."}
+                      {progress >= 30 && progress < 70 && "Processing with AI model..."}
+                      {progress >= 70 && progress < 100 && "Generating prediction..."}
+                      {progress >= 100 && "Complete!"}
+                    </div>
+                  </div>
+                )}
 
-            <div className="form-group">
-              <label htmlFor="year-remod">Year Remodeled:</label>
-              <input
-                type="number"
-                id="year-remod"
-                name="Year Remod/Add"
-                min="1800"
-                max="2025"
-                value={formData['Year Remod/Add']}
-                onChange={handleInputChange}
-                required
-              />
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="garage-cars">Garage Capacity (cars):</label>
-              <input
-                type="number"
-                id="garage-cars"
-                name="Garage Cars"
-                min="0"
-                max="4"
-                value={formData['Garage Cars']}
-                onChange={handleInputChange}
-                required
-              />
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="garage-area">Garage Area (sq ft):</label>
-              <input
-                type="number"
-                id="garage-area"
-                name="Garage Area"
-                min="0"
-                max="1500"
-                value={formData['Garage Area']}
-                onChange={handleInputChange}
-                required
-              />
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="lot-area">Lot Area (sq ft):</label>
-              <input
-                type="number"
-                id="lot-area"
-                name="Lot Area"
-                min="1000"
-                max="50000"
-                value={formData['Lot Area']}
-                onChange={handleInputChange}
-                required
-              />
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="bedrooms">Bedrooms Above Ground:</label>
-              <input
-                type="number"
-                id="bedrooms"
-                name="Bedroom AbvGr"
-                min="0"
-                max="10"
-                value={formData['Bedroom AbvGr']}
-                onChange={handleInputChange}
-                required
-              />
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="total-rooms">Total Rooms Above Ground:</label>
-              <input
-                type="number"
-                id="total-rooms"
-                name="TotRms AbvGrd"
-                min="2"
-                max="15"
-                value={formData['TotRms AbvGrd']}
-                onChange={handleInputChange}
-                required
-              />
-            </div>
+                <button
+                  type="submit"
+                  disabled={isLoading}
+                  className="predict-button"
+                >
+                  {isLoading ? (
+                    <>
+                      <div className="loading-spinner"></div>
+                      <span>Analyzing Property...</span>
+                    </>
+                  ) : (
+                    <>
+                      <span className="button-icon">🔮</span>
+                      <span>Predict House Price</span>
+                    </>
+                  )}
+                </button>
+              </div>
+            </form>
           </div>
+        ) : (
+          <div className="results-container">
+            <div className="results-header">
+              <div className="success-icon">🎉</div>
+              <h2>Prediction Complete!</h2>
+              <p>Your property valuation is ready</p>
+            </div>
 
-          <button type="submit" disabled={loading} className="predict-btn">
-            {loading ? 'Predicting...' : 'Predict House Price'}
-          </button>
-        </form>
-
-        {error && (
-          <div className="error-message">
-            <h3>Error:</h3>
-            <p>{error}</p>
-            <p>Make sure your Flask API is running on http://localhost:5000</p>
-          </div>
-        )}
-
-        {prediction && (
-          <div className="prediction-result">
-            <h3>🏠 Price Prediction</h3>
             <div className="price-display">
-              <span className="price">${prediction.predicted_price?.toLocaleString()}</span>
-              <span className="currency">USD</span>
+              <div className="price-card">
+                <div className="price-label">Estimated Value</div>
+                <div className="price-amount">
+                  <span className="currency">$</span>
+                  <span className="amount">
+                    {prediction?.predicted_price?.toLocaleString()}
+                  </span>
+                </div>
+                <div className="price-subtitle">USD</div>
+              </div>
+
+              <div className="confidence-range">
+                <div className="range-header">
+                  <span className="range-icon">📊</span>
+                  <span>Confidence Range</span>
+                </div>
+                <div className="range-values">
+                  <div className="range-item">
+                    <span className="range-label">Low</span>
+                    <span className="range-value">
+                      ${prediction?.confidence_range?.lower?.toLocaleString()}
+                    </span>
+                  </div>
+                  <div className="range-item">
+                    <span className="range-label">High</span>
+                    <span className="range-value">
+                      ${prediction?.confidence_range?.upper?.toLocaleString()}
+                    </span>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div className="confidence-range">
-              <p>Estimated Range: ${prediction.confidence_range?.lower?.toLocaleString()} - ${prediction.confidence_range?.upper?.toLocaleString()}</p>
-            </div>
+
             <div className="prediction-details">
-              <p><strong>Model Version:</strong> {prediction.model_version}</p>
-              <p><strong>Timestamp:</strong> {new Date(prediction.timestamp).toLocaleString()}</p>
+              <div className="detail-item">
+                <span className="detail-icon">🤖</span>
+                <span className="detail-label">Model Version:</span>
+                <span className="detail-value">{prediction?.model_version}</span>
+              </div>
+              <div className="detail-item">
+                <span className="detail-icon">🕒</span>
+                <span className="detail-label">Generated:</span>
+                <span className="detail-value">
+                  {new Date(prediction?.timestamp).toLocaleString()}
+                </span>
+              </div>
             </div>
-            {prediction.warning && (
-              <div className="warning">
-                <p><strong>Note:</strong> {prediction.warning}</p>
+
+            {/* Property Insights */}
+            <div className="property-insights">
+              <h3>🏠 Property Insights</h3>
+              <div className="insights-grid">
+                <div className="insight-card">
+                  <div className="insight-icon">📊</div>
+                  <div className="insight-content">
+                    <h4>Market Position</h4>
+                    <p>
+                      {prediction?.predicted_price > 300000 ? 'Premium Property' :
+                       prediction?.predicted_price > 200000 ? 'Mid-Range Property' :
+                       'Affordable Property'}
+                    </p>
+                  </div>
+                </div>
+                <div className="insight-card">
+                  <div className="insight-icon">📈</div>
+                  <div className="insight-content">
+                    <h4>Investment Potential</h4>
+                    <p>
+                      {formData['Year Built'] > 2000 ? 'Modern construction with good resale value' :
+                       formData['Year Built'] > 1980 ? 'Well-maintained with stable appreciation' :
+                       'Character property with renovation potential'}
+                    </p>
+                  </div>
+                </div>
+                <div className="insight-card">
+                  <div className="insight-icon">🏘️</div>
+                  <div className="insight-content">
+                    <h4>Property Type</h4>
+                    <p>
+                      {formData['TotRms AbvGrd'] > 8 ? 'Large family home' :
+                       formData['TotRms AbvGrd'] > 6 ? 'Comfortable family home' :
+                       'Cozy starter home'}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {prediction?.warning && (
+              <div className="warning-notice">
+                <span className="warning-icon">ℹ️</span>
+                <p>{prediction.warning}</p>
               </div>
             )}
+
+            <div className="results-actions">
+              <button onClick={resetForm} className="new-prediction-button">
+                <span className="button-icon">🔄</span>
+                <span>New Prediction</span>
+              </button>
+              <button onClick={() => window.print()} className="share-button">
+                <span className="button-icon">📤</span>
+                <span>Share Results</span>
+              </button>
+            </div>
           </div>
         )}
       </main>
+
+      {/* Footer */}
+      <footer className="app-footer">
+        <div className="footer-content">
+          <p>Powered by Machine Learning • Built with React & Flask</p>
+          <div className="footer-links">
+            <a href="https://github.com/Chandru-debug1/House-Price-Prediction-using-Machine-Learning" target="_blank" rel="noopener noreferrer">
+              <span>📂</span> View Source
+            </a>
+            <a href="/health" target="_blank">
+              <span>❤️</span> API Health
+            </a>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }

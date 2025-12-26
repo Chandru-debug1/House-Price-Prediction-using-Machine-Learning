@@ -1,279 +1,53 @@
-# 🏠 House Price Prediction - Full Stack Application
+# House Price Prediction Project
 
-A complete machine learning application with a React frontend and Flask API backend for predicting house prices using the Ames Housing dataset.
+## Overview
 
-## 🚀 Features
+This project implements a machine learning model to predict house prices using the Ames Housing dataset. The system includes:
 
-- **Machine Learning Model**: Random Forest regression trained on Ames Housing dataset
-- **Flask REST API**: Robust backend with CORS support and environment configuration
-- **React Frontend**: Modern, responsive web interface for price predictions
-- **Real-time Predictions**: Interactive form with instant price estimation
-- **Confidence Ranges**: Price predictions with estimated ranges
-- **Production Ready**: Environment variables, logging, and error handling
+- **Data Preprocessing**: Cleaning, feature engineering, and transformation
+- **Model Training**: Random Forest regression model
+- **API Deployment**: Flask-based REST API for predictions
+- **Containerization**: Docker support for easy deployment
 
-## 📊 Dataset
+## Dataset
 
-The project uses the Ames Housing dataset containing 79 explanatory variables describing residential homes in Ames, Iowa.
+The project uses the Ames Housing dataset, which contains 79 explanatory variables describing residential homes in Ames, Iowa. The target variable is the sale price of the houses.
 
-**Data Source**: [Kaggle Ames Housing Dataset](https://www.kaggle.com/datasets/prevek18/ames-housing-dataset)
+**Data Source**: The dataset can be downloaded from [Kaggle Ames Housing Dataset](https://www.kaggle.com/datasets/prevek18/ames-housing-dataset) or the original source at DePaul University.
 
-## 🛠️ Tech Stack
+Place the `AmesHousing.csv` file in the project root directory.
 
-### Backend
-- **Python 3.9+**
-- **Flask** - Web framework
-- **scikit-learn** - Machine learning
-- **pandas/numpy** - Data processing
-- **joblib** - Model serialization
+## Installation
 
-### Frontend
-- **React 18** - UI framework
-- **CSS3** - Modern styling
-- **Fetch API** - HTTP requests
+1. **Clone or download the project files**
 
-## 📁 Project Structure
-
-```
-house-price-prediction/
-├── app.py                 # Flask API application
-├── train.py              # Model training script
-├── test_api.py           # API testing script
-├── requirements.txt      # Python dependencies
-├── .env.example          # Environment configuration template
-├── .gitignore           # Git ignore rules
-├── AmesHousing.csv      # Dataset (download separately)
-├── house_price_model.pkl # Trained model (generated)
-├── frontend/            # React application
-│   ├── src/
-│   │   ├── App.js       # Main React component
-│   │   ├── App.css      # Application styles
-│   │   └── ...
-│   ├── package.json     # Node.js dependencies
-│   └── README.md        # Frontend documentation
-└── README.md            # This file
-```
-
-## 🚀 Quick Start
-
-### Prerequisites
-- Python 3.9+
-- Node.js 14+
-- Git
-
-### 1. Clone and Setup Backend
-
-```bash
-# Install Python dependencies
-pip install -r requirements.txt
-
-# Download the dataset
-# Place AmesHousing.csv in the project root
-```
-
-### 2. Train the Model
-
-```bash
-python train.py
-```
-
-This creates `house_price_model.pkl` with the trained model.
-
-### 3. Setup Frontend
-
-```bash
-cd frontend
-npm install
-cd ..
-```
-
-### 4. Run the Application
-
-**Option A: Run Backend and Frontend Separately**
-
-Terminal 1 - Start Flask API:
-```bash
-python app.py
-```
-
-Terminal 2 - Start React App:
-```bash
-cd frontend
-npm start
-```
-
-**Option B: Run Everything with Scripts**
-
-Create a batch file or use multiple terminals as above.
-
-### 5. Access the Application
-
-- **Frontend**: http://localhost:3000
-- **API**: http://localhost:5000
-- **API Health Check**: http://localhost:5000/health
-
-## 🎯 Usage
-
-1. Open http://localhost:3000 in your browser
-2. Fill in house features (quality, size, year built, etc.)
-3. Click "Predict House Price"
-4. View the predicted price with confidence range
-
-## 🔧 API Endpoints
-
-### POST /predict
-Predict house price based on features.
-
-**Request Body:**
-```json
-{
-  "Overall Qual": 7,
-  "Gr Liv Area": 1710,
-  "Total Bsmt SF": 856,
-  "1st Flr SF": 856,
-  "Full Bath": 2,
-  "Year Built": 2003,
-  "Year Remod/Add": 2003,
-  "Garage Cars": 2,
-  "Garage Area": 548,
-  "Lot Area": 8450,
-  "Bedroom AbvGr": 3,
-  "TotRms AbvGrd": 8
-}
-```
-
-**Response:**
-```json
-{
-  "predicted_price": 208500,
-  "currency": "USD",
-  "confidence_range": {
-    "lower": 187650,
-    "upper": 229350
-  },
-  "model_version": "1.0",
-  "timestamp": "2024-01-15T10:30:00"
-}
-```
-
-### GET /health
-Check API health status.
-
-## 🧪 Testing
-
-### Test the API
-```bash
-python test_api.py
-```
-
-### Test the Frontend
-```bash
-cd frontend
-npm test
-```
-
-## 🔐 Environment Configuration
-
-1. Copy `.env.example` to `.env`
-2. Update values as needed:
-   ```env
-   SECRET_KEY=your-secret-key-here
-   FLASK_ENV=development
-   PORT=5000
+2. **Create a virtual environment** (optional but recommended):
+   ```bash
+   python -m venv .venv
+   # On Windows:
+   .venv\Scripts\activate
+   # On macOS/Linux:
+   source .venv/bin/activate
    ```
 
-## 🚢 Free Hosting & Deployment
+3. **Install dependencies**:
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-### 🚀 Recommended: Render.com (Free Tier - 750 hours/month)
+4. **Download the dataset**:
+   - Download `AmesHousing.csv` from Kaggle
+   - Place it in the project root directory
 
-**Step 1: Prepare for Deployment**
-```bash
-# Run deployment preparation script (Windows)
-deploy.bat
+## Model Training
 
-# OR manually:
-cd frontend && npm install && npm run build
-git init && git add . && git commit -m "Initial commit"
-```
+To train the model, you need to run the training script. Since the detailed notebook is not included, here's a summary of the training process:
 
-**Step 2: Create GitHub Repository**
-```bash
-# Create new repository on GitHub
-# Then push your code:
-git remote add origin https://github.com/YOUR_USERNAME/YOUR_REPO.git
-git push -u origin main
-```
+### Training Steps
 
-**Step 3: Deploy Backend (Flask API)**
-1. Go to [render.com](https://render.com) and sign up
-2. Create new **"Web Service"**
-3. Connect your GitHub repository
-4. Configure:
-   - **Runtime**: Python 3
-   - **Build Command**: `pip install -r requirements.txt`
-   - **Start Command**: `gunicorn app:app`
-   - **Environment Variables**: Copy from `.env.example`
-
-**Step 4: Deploy Frontend (React)**
-1. Create new **"Static Site"**
-2. Connect same GitHub repository
-3. Configure:
-   - **Build Command**: `cd frontend && npm install && npm run build`
-   - **Publish Directory**: `frontend/build`
-
-### ⚡ Alternative: Railway.app (Super Easy - 512MB RAM free)
-
-1. Go to [railway.app](https://railway.app) and sign up
-2. Click **"Deploy from GitHub"**
-3. Connect your repository
-4. Railway auto-detects Python and deploys automatically!
-5. Add environment variables in Railway dashboard
-
-**That's it!** Railway handles everything automatically.
-
-### 🎯 Alternative: Vercel (Modern - Handles both frontend & backend)
-
-```bash
-# Install Vercel CLI
-npm i -g vercel
-
-# Deploy (handles both frontend and backend)
-vercel --prod
-```
-
-### 📊 Deployment Files Included
-
-- `render.yaml` - Render.com configuration
-- `vercel.json` - Vercel configuration
-- `deploy.bat` - Windows deployment preparation script
-
-## 🧪 Testing
-
-### Test the API
-```bash
-python test_api.py
-```
-
-### Test the Frontend
-```bash
-cd frontend
-npm test
-```
-
-1. Fork the repository
-2. Create a feature branch
-3. Make changes
-4. Test thoroughly
-5. Submit a pull request
-
-## 📄 License
-
-MIT License - feel free to use this project for learning and commercial purposes.
-
-## 🙏 Acknowledgments
-
-- Ames Housing Dataset creators
-- scikit-learn and Flask communities
-- React and Node.js communities
+1. **Data Loading and Cleaning**:
+   - Load the AmesHousing.csv dataset
+   - Handle missing values (median for numerical, mode for categorical)
    - Remove duplicates
 
 2. **Feature Engineering**:

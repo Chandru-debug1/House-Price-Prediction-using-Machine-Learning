@@ -229,25 +229,60 @@ print(f"Predicted Price: ${result['predicted_price']:,.2f}")
 
 For production deployment, replace the development server with a WSGI server:
 
-### Install Gunicorn
+## Environment Variables
+
+The application supports comprehensive environment variable configuration for different deployment environments.
+
+### Configuration Options
+
+Copy `.env.example` to `.env` and customize the values:
+
 ```bash
-pip install gunicorn
+cp .env.example .env
 ```
 
-### Production Startup
+### Available Environment Variables
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `SECRET_KEY` | dev-secret-key | Flask secret key for sessions |
+| `FLASK_ENV` | development | Environment (development/production) |
+| `DEBUG` | false | Enable debug mode |
+| `PORT` | 5000 | Server port |
+| `HOST` | localhost | Server host |
+| `API_TITLE` | House Price Prediction API | API title |
+| `API_VERSION` | 1.0 | API version |
+| `MAX_REQUEST_SIZE` | 1048576 | Max request size in bytes |
+| `MODEL_PATH` | house_price_model.pkl | Path to model file |
+| `CORS_ORIGINS` | * | Allowed CORS origins (comma-separated) |
+| `LOG_LEVEL` | INFO | Logging level (DEBUG, INFO, WARNING, ERROR) |
+
+### Production Environment Variables
+
+For production deployment, set these variables:
+
 ```bash
-# Instead of: python app.py
-gunicorn --bind 0.0.0.0:$PORT app:app
+FLASK_ENV=production
+DEBUG=false
+SECRET_KEY=your-secure-random-key-here
+LOG_LEVEL=WARNING
 ```
 
-### Update Procfile for Heroku
-```
-web: gunicorn --bind 0.0.0.0:$PORT app:app
-```
+### Platform-Specific Setup
 
-### Environment Variables
-- `PORT`: Server port (provided by hosting platforms)
-- `FLASK_ENV`: Set to 'production' for production
+#### Render.com
+Add environment variables in the dashboard:
+- `FLASK_ENV=production`
+- `DEBUG=false`
+- `PORT` (automatically set)
+
+#### Railway.app
+Set environment variables in project settings:
+- `FLASK_ENV=production`
+- `DEBUG=false`
+
+#### PythonAnywhere
+Set environment variables in the web app configuration or use a `.env` file.
 
 ## Support
 

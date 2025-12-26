@@ -1,0 +1,26 @@
+services:
+  # Flask API Backend
+  - type: web
+    name: house-price-api
+    runtime: python3
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app
+    envVars:
+      - key: FLASK_ENV
+        value: production
+      - key: SECRET_KEY
+        generateValue: true
+      - key: PORT
+        value: 10000
+      - key: MODEL_PATH
+        value: house_price_model.pkl
+
+  # React Frontend
+  - type: web
+    name: house-price-frontend
+    runtime: static
+    buildCommand: cd frontend && npm install && npm run build
+    staticPublishPath: frontend/build
+    envVars:
+      - key: NODE_ENV
+        value: production

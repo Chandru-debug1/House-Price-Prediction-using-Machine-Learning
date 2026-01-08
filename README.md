@@ -1,5 +1,4 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
+
 # House Price Prediction - React Frontend
 
 A modern React web application for predicting house prices using machine learning.
@@ -102,7 +101,7 @@ This creates a `build` directory with optimized production files.
 # House Price Prediction Project
 =======
 # 🏠 House Price Prediction - Full Stack Application
->>>>>>> ef3e1fb5f07edc7a94b10d5bdc786322bd3089f5
+
 
 A complete machine learning application with a React frontend and Flask API backend for predicting house prices using the Ames Housing dataset.
 
@@ -269,18 +268,6 @@ Predict house price based on features.
 
 ### GET /health
 Check API health status.
-
-## 🚢 Free Hosting & Deployment
-
-### 🚀 Recommended: Railway.app (Super Easy - 512MB RAM free)
-
-1. Go to [railway.app](https://railway.app) and sign up
-2. Click **"Deploy from GitHub"**
-3. Connect your repository: `Chandru-debug1/House-Price-Prediction-using-Machine-Learning`
-4. Railway auto-detects Python and deploys automatically!
-5. Add environment variables in Railway dashboard
-
-**That's it!** Railway handles everything automatically.
 
 ### 🔧 Alternative: Render.com (Professional - 750 hours/month free)
 
